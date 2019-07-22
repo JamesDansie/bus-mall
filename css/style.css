@@ -1,4 +1,13 @@
-
+body{
+  background-color: rgb(109, 192, 109);
+}
+h1{
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+}
 img{
-  width:30%;
+  border: solid 3px blue;
+  margin: auto;
+  width: 25%;
 }

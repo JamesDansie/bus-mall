@@ -6,6 +6,7 @@ var imageThreeEl = document.getElementById('product3');
 var productContainerEl = document.getElementById('product-container');
 var randomArray = [];
 var randomIndex = 0;
+var votes = 0;
 
 
 //Nevermind I don't know how to make require work >_<
@@ -16,7 +17,6 @@ var randomIndex = 0;
 //Eventually replace this with the zombie code above to make a list that will update with new products
 var products = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
 
-var recentRandomNumber = [];
 var allProducts = [];
 
 function Product(nameIn){
@@ -94,6 +94,10 @@ function handleClick(){
     }
   }
 
+  votes++;
+  if(votes >= 25){
+    productContainerEl.removeEventListener('click', handleClick);
+  }
   render();
 }
 
