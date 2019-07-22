@@ -1,9 +1,12 @@
 Initial
-
+✔ setup the folder structure and git @done (7/22/2019, 1:28:47 PM)
+✔ make the user stories @done (7/22/2019, 1:28:48 PM)
 
 Index Page
-
-
-Sales Page
+☐ set up basic html with 3 equally spaced images (kind of like 3 columns)
 
 JS Requirements
+☐ pull the image list from the folder similar to; https://stackoverflow.com/questions/2727167/how-do-you-get-a-list-of-the-names-of-all-files-present-in-a-directory-in-node-j?rq=1
+☐ make the product constructor with the properties/stats
+☐ render just one image to the page, then add the others
+☐ add an event listener to count

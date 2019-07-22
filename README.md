@@ -1,2 +1,5 @@
-# lab-06-salmon-cookies
-This is the repository for lab 06 at code fellows
+# bus-mall
+
+##author: James Dansie
+
+This is for the bus-mall project at code fellows
