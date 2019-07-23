@@ -4,10 +4,16 @@ var imageOneEl = document.getElementById('product1');
 var imageTwoEl = document.getElementById('product2');
 var imageThreeEl = document.getElementById('product3');
 var productContainerEl = document.getElementById('product-container');
-var tableEl = document.getElementById('results');
+var canvasEl = document.getElementById('chart');
 var randomArray = [];
 var randomIndex = 0;
-var votes = 0;
+var votesRemaining = 25;
+var clicksArray = [];
+var viewsArray = [];
+var clicksPerViewArray = [];
+var namesArray = [];
+var bubbleData = [];
+var barColor = [];
 
 
 // // Nevermind I don't know how to make require work >_<
@@ -20,6 +26,14 @@ var votes = 0;
 
 //Eventually replace this with the zombie code above to make a list that will update with new products
 var products = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
+var barColorExisting = [
+  'rgba(255, 99, 132, 0.2)',
+  'rgba(54, 162, 235, 0.2)',
+  'rgba(255, 206, 86, 0.2)',
+  'rgba(75, 192, 192, 0.2)',
+  'rgba(153, 102, 255, 0.2)',
+  'rgba(255, 159, 64, 0.2)'
+];
 
 var allProducts = [];
 
@@ -28,6 +42,7 @@ function Product(nameIn){
   this.filepath = `img/${nameIn}`;
   this.votes = 0;
   this.views = 0;
+  this.clicksPerView = 0;
 
   allProducts.push(this);
 }
@@ -58,71 +73,26 @@ function makeRandomArray(){
   }
 }
 
-//Makes the Header
-function makeHeader(){
-  //declaring elements
-  var trEl = document.createElement('tr');
-  tableEl.appendChild(trEl);
+function makePicture(imageEl, index){
+  //Chooses a random unique index from the array of random unique indexes
+  var randomIndex = randomArray[index];
 
-  //Writing the first element with 'location'
-  addElement('th', 'Product', trEl);
-
-  //Writing the views
-  addElement('th', 'Views', trEl);
-
-  //Writing the clicks
-  addElement('th', 'Clicks', trEl);
-
-  //Writing the clicks per view
-  addElement('th', 'Clicks/View', trEl);
-}
-
-//Make Table Body
-function makeBody(){
-
-  for(var i = 0; i < allProducts.length; i++){
-    //declaring elements
-    var trEl = document.createElement('tr');
-    tableEl.appendChild(trEl);
-
-    addElement('th', allProducts[i].name, trEl);
-    addElement('td', allProducts[i].views, trEl);
-    addElement('td', allProducts[i].votes, trEl);
-
-    //calculating votes per view if NaN then set to zero
-    if(isNaN(allProducts[i].votes/allProducts[i].views)){
-      addElement('td', 0, trEl);
-    }else{
-      addElement('td', allProducts[i].votes/allProducts[i].views, trEl);
-    }
-  }
-}
-
-//Add element function
-function addElement(childElType, childText, ParentEl){
-  var childEl = document.createElement(childElType);
-  childEl.textContent = childText;
-  ParentEl.appendChild(childEl);
+  //updates all the things
+  imageEl.src = allProducts[randomIndex].filepath;
+  imageEl.alt = allProducts[randomIndex].name;
+  imageEl.title = allProducts[randomIndex].name;
+  allProducts[randomIndex].views++;
 }
 
 function render(){
   //The index will increment 3 at a time 1,2,3 then 4,5,6 then 7,8,9
   //it will be an index for a random unique number from the randomArray
   //This will return 3 random unique products for iteration
-  imageOneEl.src = allProducts[randomArray[randomIndex]].filepath;
-  imageOneEl.alt = allProducts[randomArray[randomIndex]].name;
-  imageOneEl.title = allProducts[randomArray[randomIndex]].name;
-  allProducts[randomArray[randomIndex]].views++;
 
-  imageTwoEl.src = allProducts[randomArray[randomIndex+1]].filepath;
-  imageTwoEl.alt = allProducts[randomArray[randomIndex+1]].name;
-  imageTwoEl.title = allProducts[randomArray[randomIndex+1]].name;
-  allProducts[randomArray[randomIndex+1]].views++;
+  makePicture(imageOneEl, randomIndex);
+  makePicture(imageTwoEl, randomIndex+1);
+  makePicture(imageThreeEl, randomIndex+2);
 
-  imageThreeEl.src = allProducts[randomArray[randomIndex+2]].filepath;
-  imageThreeEl.alt = allProducts[randomArray[randomIndex+2]].name;
-  imageThreeEl.title = allProducts[randomArray[randomIndex+2]].name;
-  allProducts[randomArray[randomIndex+2]].views++;
   console.log('index is ',randomIndex);
 
   //each time we load 3 images so increment by 3
@@ -135,6 +105,120 @@ function render(){
   }
 }
 
+function makeArrays(){
+  //Need to make arrays of names and data
+
+  for(var i = 0; i < allProducts.length; i++){
+    namesArray.push(allProducts[i].name);
+    clicksArray.push(allProducts[i].votes);
+    viewsArray.push(allProducts[i].views);
+    clicksPerViewArray.push(allProducts[i].votes/allProducts[i].views);
+
+    //just repeats the existing colors
+    barColor.push(barColorExisting[i%5]);
+  }
+}
+
+function makeBarChart(){
+  var ctx = canvasEl.getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      labels: namesArray,
+      datasets: [{
+        label: '# of Votes',
+        data: clicksArray,
+        backgroundColor: barColor,
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+
+function makeBubbleData(){
+  for(var i = 0; i < allProducts.length; i++){
+    var dataPointObject = {};
+
+    //since the max clicks per view is 1 the largest dot needs to be bigger
+    var radiusSize = allProducts[i].clicksPerView*40;
+    if(radiusSize === 0){
+      radiusSize = 1;
+    }
+
+    dataPointObject.label = allProducts[i].name;
+    //make and array with an object where x = views, y = votes, radius = radiusSize (in px)
+    dataPointObject.data = [{x:allProducts[i].views, y:allProducts[i].votes, r:radiusSize}];
+    dataPointObject.backgroundColor = barColor[i];
+
+    bubbleData.push(dataPointObject);
+  }
+}
+
+//shamelessly stolen from; https://jsfiddle.net/milostimotic/87msyj22/8/
+function makeBubbleChart(){
+  var ctx = document.getElementById('chart2').getContext('2d');
+  new Chart(ctx, {
+    type: 'bubble',
+    data: {
+      datasets: bubbleData
+    },
+    //from; https://code.tutsplus.com/tutorials/getting-started-with-chartjs-scales--cms-28477
+    options: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          boxWidth: 80,
+          fontColor: 'black'
+        }
+      },
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false,
+            color: "black"
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "# of views",
+            fontColor: "red",
+            fontSize: 18
+          }
+        }],
+        yAxes: [{
+          gridLines: {
+            color: "black",
+            borderDash: [2, 5],
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "# of votes",
+            fontColor: "green",
+            fontSize: 18
+          }
+        }]
+      }
+    }
+  });
+}
+
 function handleClick(){
   var chosenImg = event.target.title;
 
@@ -142,21 +226,23 @@ function handleClick(){
   for(var i = 0; i < allProducts.length; i++){
     if(allProducts[i].name === chosenImg){
       allProducts[i].votes++;
+      allProducts[i].clicksPerView = allProducts[i].votes/allProducts[i].views;
     }
   }
 
-  votes++;
+  votesRemaining--;
 
   //if we have 25 votes then turn off the event listener and make a table
-  if(votes >= 25){
+  if(votesRemaining === 0){
     productContainerEl.removeEventListener('click', handleClick);
-    makeHeader();
-    makeBody();
+    makeArrays();
+    makeBarChart();
+    makeBubbleData();
+    makeBubbleChart();
   }
   render();
 }
 
 productContainerEl.addEventListener('click', handleClick);
-
 makeRandomArray();
 render();

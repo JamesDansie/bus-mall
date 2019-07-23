@@ -2,16 +2,24 @@ body{
   background-color: rgb(175, 241, 175);
   text-align: center;
 }
+canvas{
+  margin: 15px;
+}
 h1{
   font-size: 36px;
   font-weight: bold;
   text-align: center;
+  margin: 1.5em;
 }
 img{
   border: solid 3px blue;
   margin: 10px;
   width: 25%;
   height: 25%;
+}
+#product-container{
+  border: solid 2px black;
+  background-color: teal;
 }
 td{
   text-align: center;
