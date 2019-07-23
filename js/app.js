@@ -5,9 +5,14 @@ var imageTwoEl = document.getElementById('product2');
 var imageThreeEl = document.getElementById('product3');
 var productContainerEl = document.getElementById('product-container');
 var canvasEl = document.getElementById('chart');
+var canvasEl2 = document.getElementById('chart2');
 var randomArray = [];
 var randomIndex = 0;
 var votesRemaining = 4;
+var clicksArray = [];
+var viewsArray = [];
+var clicksPerViewArray = [];
+var namesArray = [];
 
 
 // // Nevermind I don't know how to make require work >_<
@@ -90,12 +95,8 @@ function render(){
   }
 }
 
-function makeChart(){
+function makeArrays(){
   //Need to make arrays of names and data
-  var clicksArray = [];
-  var viewsArray = [];
-  var clicksPerViewArray = [];
-  var namesArray = [];
 
   for(var i = 0; i < allProducts.length; i++){
     namesArray.push(allProducts[i].name);
@@ -103,9 +104,12 @@ function makeChart(){
     viewsArray.push(allProducts[i].views);
     clicksPerViewArray.push(allProducts[i].votes/allProducts[i].views);
   }
+}
+
+function makeBarChart(){
   var ctx = canvasEl.getContext('2d');
   var myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'horizontalBar',
     data: {
       labels: namesArray,
       datasets: [{
@@ -142,6 +146,125 @@ function makeChart(){
   });
 }
 
+var bubbleData = [];
+for(var i = 0; i < allProducts.length; i++){
+  var dataPointObject = {};
+
+  dataPointObject.label = allProducts[i].name;
+  dataPointObject.data = [{x:allProducts[i].views}];
+
+  bubbleData.push(dataPointObject);
+}
+
+//shamelessly stolen from; https://jsfiddle.net/milostimotic/87msyj22/8/
+function makeBubbleChart(){
+  var ctx = document.getElementById('chart2').getContext('2d');
+  new Chart(ctx, {
+    type: 'bubble',
+    data: {
+      datasets: [
+        {
+          label: 'John',
+          data: [
+            {
+              x: 3,
+              y: 7,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        },
+        {
+          label: 'Paul',
+          data: [
+            {
+              x: 6,
+              y: 2,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        },
+        {
+          label: 'George',
+          data: [
+            {
+              x: 2,
+              y: 6,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        },
+        {
+          label: 'Ringo',
+          data: [
+            {
+              x: 5,
+              y: 3,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        },
+        {
+          label: 'John',
+          data: [
+            {
+              x: 2,
+              y: 1,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        },
+        {
+          label: 'George',
+          data: [
+            {
+              x: 1,
+              y: 3,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        },
+        {
+          label: 'Ringo',
+          data: [
+            {
+              x: 1,
+              y: 1,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        },
+        {
+          label: 'George',
+          data: [
+            {
+              x: 1,
+              y: 2,
+              r: 10
+            }
+          ],
+          backgroundColor:"#ff6384",
+          hoverBackgroundColor: "#ff6384"
+        }
+      ]
+    }
+  });
+}
+
+
 function handleClick(){
   var chosenImg = event.target.title;
 
@@ -157,12 +280,14 @@ function handleClick(){
   //if we have 25 votes then turn off the event listener and make a table
   if(votesRemaining === 0){
     productContainerEl.removeEventListener('click', handleClick);
-    makeChart();
+    makeArrays();
+    makeBarChart();
+    makeBubbleChart();
   }
   render();
 }
 
 productContainerEl.addEventListener('click', handleClick);
-
+makeBubbleChart();
 makeRandomArray();
 render();
