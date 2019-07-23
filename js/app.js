@@ -113,6 +113,8 @@ function makeArrays(){
     clicksArray.push(allProducts[i].votes);
     viewsArray.push(allProducts[i].views);
     clicksPerViewArray.push(allProducts[i].votes/allProducts[i].views);
+
+    //just repeats the existing colors
     barColor.push(barColorExisting[i%5]);
   }
 }
@@ -150,21 +152,21 @@ function makeBarChart(){
   });
 }
 
-
-
 function makeBubbleData(){
   for(var i = 0; i < allProducts.length; i++){
     var dataPointObject = {};
 
-    var radiusSize = allProducts[i].clicksPerView*30;
+    //since the max clicks per view is 1 the largest dot needs to be bigger
+    var radiusSize = allProducts[i].clicksPerView*40;
     if(radiusSize === 0){
       radiusSize = 1;
     }
-  
+
     dataPointObject.label = allProducts[i].name;
+    //make and array with an object where x = views, y = votes, radius = radiusSize (in px)
     dataPointObject.data = [{x:allProducts[i].views, y:allProducts[i].votes, r:radiusSize}];
     dataPointObject.backgroundColor = barColor[i];
-  
+
     bubbleData.push(dataPointObject);
   }
 }
@@ -196,7 +198,8 @@ function makeBubbleChart(){
           scaleLabel: {
             display: true,
             labelString: "# of views",
-            fontColor: "red"
+            fontColor: "red",
+            fontSize: 18
           }
         }],
         yAxes: [{
@@ -207,7 +210,8 @@ function makeBubbleChart(){
           scaleLabel: {
             display: true,
             labelString: "# of votes",
-            fontColor: "green"
+            fontColor: "green",
+            fontSize: 18
           }
         }]
       }
