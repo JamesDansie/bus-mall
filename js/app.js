@@ -7,7 +7,7 @@ var productContainerEl = document.getElementById('product-container');
 var tableEl = document.getElementById('results');
 var randomArray = [];
 var randomIndex = 0;
-var votes = 0;
+var votesRemaining = 4;
 
 
 // // Nevermind I don't know how to make require work >_<
@@ -105,24 +105,26 @@ function addElement(childElType, childText, ParentEl){
   ParentEl.appendChild(childEl);
 }
 
+function makePicture(imageEl, index){
+  //Chooses a random unique index
+  var randomIndex = randomArray[index];
+
+  //updates all the things
+  imageEl.src = allProducts[randomIndex].filepath;
+  imageEl.alt = allProducts[randomIndex].name;
+  imageEl.title = allProducts[randomIndex].name;
+  allProducts[randomIndex].views++;
+}
+
 function render(){
   //The index will increment 3 at a time 1,2,3 then 4,5,6 then 7,8,9
   //it will be an index for a random unique number from the randomArray
   //This will return 3 random unique products for iteration
-  imageOneEl.src = allProducts[randomArray[randomIndex]].filepath;
-  imageOneEl.alt = allProducts[randomArray[randomIndex]].name;
-  imageOneEl.title = allProducts[randomArray[randomIndex]].name;
-  allProducts[randomArray[randomIndex]].views++;
 
-  imageTwoEl.src = allProducts[randomArray[randomIndex+1]].filepath;
-  imageTwoEl.alt = allProducts[randomArray[randomIndex+1]].name;
-  imageTwoEl.title = allProducts[randomArray[randomIndex+1]].name;
-  allProducts[randomArray[randomIndex+1]].views++;
+  makePicture(imageOneEl, randomIndex);
+  makePicture(imageTwoEl, randomIndex+1);
+  makePicture(imageThreeEl, randomIndex+2);
 
-  imageThreeEl.src = allProducts[randomArray[randomIndex+2]].filepath;
-  imageThreeEl.alt = allProducts[randomArray[randomIndex+2]].name;
-  imageThreeEl.title = allProducts[randomArray[randomIndex+2]].name;
-  allProducts[randomArray[randomIndex+2]].views++;
   console.log('index is ',randomIndex);
 
   //each time we load 3 images so increment by 3
@@ -145,10 +147,10 @@ function handleClick(){
     }
   }
 
-  votes++;
+  votesRemaining--;
 
   //if we have 25 votes then turn off the event listener and make a table
-  if(votes >= 25){
+  if(votesRemaining === 0){
     productContainerEl.removeEventListener('click', handleClick);
     makeHeader();
     makeBody();
@@ -160,3 +162,5 @@ productContainerEl.addEventListener('click', handleClick);
 
 makeRandomArray();
 render();
+
+
