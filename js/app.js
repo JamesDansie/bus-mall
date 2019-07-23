@@ -33,6 +33,7 @@ function Product(nameIn){
   this.filepath = `img/${nameIn}`;
   this.votes = 0;
   this.views = 0;
+  this.clicksPerView = 0;
 
   allProducts.push(this);
 }
@@ -147,13 +148,21 @@ function makeBarChart(){
 }
 
 var bubbleData = [];
-for(var i = 0; i < allProducts.length; i++){
-  var dataPointObject = {};
 
-  dataPointObject.label = allProducts[i].name;
-  dataPointObject.data = [{x:allProducts[i].views}];
+function makeBubbleData(){
+  for(var i = 0; i < allProducts.length; i++){
+    var dataPointObject = {};
 
-  bubbleData.push(dataPointObject);
+    var radiusSize = allProducts[i].clicksPerView*5;
+    if(radiusSize === 0){
+      radiusSize = 1;
+    }
+  
+    dataPointObject.label = allProducts[i].name;
+    dataPointObject.data = [{x:allProducts[i].views, y:allProducts[i].votes, r:radiusSize}];
+  
+    bubbleData.push(dataPointObject);
+  }
 }
 
 //shamelessly stolen from; https://jsfiddle.net/milostimotic/87msyj22/8/
@@ -162,104 +171,7 @@ function makeBubbleChart(){
   new Chart(ctx, {
     type: 'bubble',
     data: {
-      datasets: [
-        {
-          label: 'John',
-          data: [
-            {
-              x: 3,
-              y: 7,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        },
-        {
-          label: 'Paul',
-          data: [
-            {
-              x: 6,
-              y: 2,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        },
-        {
-          label: 'George',
-          data: [
-            {
-              x: 2,
-              y: 6,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        },
-        {
-          label: 'Ringo',
-          data: [
-            {
-              x: 5,
-              y: 3,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        },
-        {
-          label: 'John',
-          data: [
-            {
-              x: 2,
-              y: 1,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        },
-        {
-          label: 'George',
-          data: [
-            {
-              x: 1,
-              y: 3,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        },
-        {
-          label: 'Ringo',
-          data: [
-            {
-              x: 1,
-              y: 1,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        },
-        {
-          label: 'George',
-          data: [
-            {
-              x: 1,
-              y: 2,
-              r: 10
-            }
-          ],
-          backgroundColor:"#ff6384",
-          hoverBackgroundColor: "#ff6384"
-        }
-      ]
+      datasets: bubbleData
     }
   });
 }
@@ -272,6 +184,7 @@ function handleClick(){
   for(var i = 0; i < allProducts.length; i++){
     if(allProducts[i].name === chosenImg){
       allProducts[i].votes++;
+      allProducts[i].clicksPerView = allProducts[i].votes/allProducts[i].views;
     }
   }
 
@@ -282,12 +195,12 @@ function handleClick(){
     productContainerEl.removeEventListener('click', handleClick);
     makeArrays();
     makeBarChart();
+    makeBubbleData();
     makeBubbleChart();
   }
   render();
 }
 
 productContainerEl.addEventListener('click', handleClick);
-makeBubbleChart();
 makeRandomArray();
 render();
