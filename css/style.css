@@ -2,6 +2,9 @@ body{
   background-color: rgb(175, 241, 175);
   text-align: center;
 }
+canvas{
+  margin: 15px;
+}
 h1{
   font-size: 36px;
   font-weight: bold;

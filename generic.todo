@@ -9,5 +9,5 @@ JS Requirements
   ☐ turns out that is really hard. need live server? and node?
 ✔ link to the canvas element @done (7/23/2019, 1:32:35 PM)
 ✔ make a bar plot @done (7/23/2019, 1:32:36 PM)
-☐ try a radar plot with the different values being the spokes
+✔ try a bubble plot with the different values being the spokes @done (7/23/2019, 3:28:32 PM)
 

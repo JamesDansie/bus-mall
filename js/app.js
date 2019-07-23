@@ -5,14 +5,15 @@ var imageTwoEl = document.getElementById('product2');
 var imageThreeEl = document.getElementById('product3');
 var productContainerEl = document.getElementById('product-container');
 var canvasEl = document.getElementById('chart');
-var canvasEl2 = document.getElementById('chart2');
 var randomArray = [];
 var randomIndex = 0;
-var votesRemaining = 4;
+var votesRemaining = 25;
 var clicksArray = [];
 var viewsArray = [];
 var clicksPerViewArray = [];
 var namesArray = [];
+var bubbleData = [];
+var barColor = [];
 
 
 // // Nevermind I don't know how to make require work >_<
@@ -25,6 +26,14 @@ var namesArray = [];
 
 //Eventually replace this with the zombie code above to make a list that will update with new products
 var products = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
+var barColorExisting = [
+  'rgba(255, 99, 132, 0.2)',
+  'rgba(54, 162, 235, 0.2)',
+  'rgba(255, 206, 86, 0.2)',
+  'rgba(75, 192, 192, 0.2)',
+  'rgba(153, 102, 255, 0.2)',
+  'rgba(255, 159, 64, 0.2)'
+];
 
 var allProducts = [];
 
@@ -104,6 +113,7 @@ function makeArrays(){
     clicksArray.push(allProducts[i].votes);
     viewsArray.push(allProducts[i].views);
     clicksPerViewArray.push(allProducts[i].votes/allProducts[i].views);
+    barColor.push(barColorExisting[i%5]);
   }
 }
 
@@ -116,14 +126,7 @@ function makeBarChart(){
       datasets: [{
         label: '# of Votes',
         data: clicksArray,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
+        backgroundColor: barColor,
         borderColor: [
           'rgba(255, 99, 132, 1)',
           'rgba(54, 162, 235, 1)',
@@ -147,19 +150,20 @@ function makeBarChart(){
   });
 }
 
-var bubbleData = [];
+
 
 function makeBubbleData(){
   for(var i = 0; i < allProducts.length; i++){
     var dataPointObject = {};
 
-    var radiusSize = allProducts[i].clicksPerView*5;
+    var radiusSize = allProducts[i].clicksPerView*30;
     if(radiusSize === 0){
       radiusSize = 1;
     }
   
     dataPointObject.label = allProducts[i].name;
     dataPointObject.data = [{x:allProducts[i].views, y:allProducts[i].votes, r:radiusSize}];
+    dataPointObject.backgroundColor = barColor[i];
   
     bubbleData.push(dataPointObject);
   }
@@ -172,10 +176,44 @@ function makeBubbleChart(){
     type: 'bubble',
     data: {
       datasets: bubbleData
+    },
+    //from; https://code.tutsplus.com/tutorials/getting-started-with-chartjs-scales--cms-28477
+    options: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          boxWidth: 80,
+          fontColor: 'black'
+        }
+      },
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false,
+            color: "black"
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "# of views",
+            fontColor: "red"
+          }
+        }],
+        yAxes: [{
+          gridLines: {
+            color: "black",
+            borderDash: [2, 5],
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "# of votes",
+            fontColor: "green"
+          }
+        }]
+      }
     }
   });
 }
-
 
 function handleClick(){
   var chosenImg = event.target.title;
