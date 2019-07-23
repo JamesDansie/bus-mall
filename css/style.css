@@ -1,5 +1,6 @@
 body{
-  background-color: rgb(109, 192, 109);
+  background-color: rgb(175, 241, 175);
+  text-align: center;
 }
 h1{
   font-size: 36px;
@@ -8,6 +9,15 @@ h1{
 }
 img{
   border: solid 3px blue;
-  margin: auto;
+  margin: 10px;
   width: 25%;
+  height: 25%;
+}
+td{
+  text-align: center;
+}
+th{
+  font-weight: bold;
+  font-size: 18px;
+  padding: 5px 10px 5px 10px;
 }
