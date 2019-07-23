@@ -2,12 +2,12 @@ Initial
 ✔ make a canvas branch @done (7/23/2019, 1:11:48 PM)
 
 Index Page
-☐ make canvas element with id
+✔ make canvas element with id @done (7/23/2019, 1:32:30 PM)
 
 JS Requirements
 ☐ pull the image list from the folder similar to; https://stackoverflow.com/questions/2727167/how-do-you-get-a-list-of-the-names-of-all-files-present-in-a-directory-in-node-j?rq=1
   ☐ turns out that is really hard. need live server? and node?
-☐ link to the canvas element
-☐ make a bar plot
+✔ link to the canvas element @done (7/23/2019, 1:32:35 PM)
+✔ make a bar plot @done (7/23/2019, 1:32:36 PM)
 ☐ try a radar plot with the different values being the spokes
 

@@ -4,7 +4,7 @@ var imageOneEl = document.getElementById('product1');
 var imageTwoEl = document.getElementById('product2');
 var imageThreeEl = document.getElementById('product3');
 var productContainerEl = document.getElementById('product-container');
-var tableEl = document.getElementById('results');
+var canvasEl = document.getElementById('chart');
 var randomArray = [];
 var randomIndex = 0;
 var votesRemaining = 4;
@@ -58,55 +58,8 @@ function makeRandomArray(){
   }
 }
 
-//Makes the Header
-function makeHeader(){
-  //declaring elements
-  var trEl = document.createElement('tr');
-  tableEl.appendChild(trEl);
-
-  //Writing the first element with 'location'
-  addElement('th', 'Product', trEl);
-
-  //Writing the views
-  addElement('th', 'Views', trEl);
-
-  //Writing the clicks
-  addElement('th', 'Clicks', trEl);
-
-  //Writing the clicks per view
-  addElement('th', 'Clicks/View', trEl);
-}
-
-//Make Table Body
-function makeBody(){
-
-  for(var i = 0; i < allProducts.length; i++){
-    //declaring elements
-    var trEl = document.createElement('tr');
-    tableEl.appendChild(trEl);
-
-    addElement('th', allProducts[i].name, trEl);
-    addElement('td', allProducts[i].views, trEl);
-    addElement('td', allProducts[i].votes, trEl);
-
-    //calculating votes per view if NaN then set to zero
-    if(isNaN(allProducts[i].votes/allProducts[i].views)){
-      addElement('td', 0, trEl);
-    }else{
-      addElement('td', allProducts[i].votes/allProducts[i].views, trEl);
-    }
-  }
-}
-
-//Add element function
-function addElement(childElType, childText, ParentEl){
-  var childEl = document.createElement(childElType);
-  childEl.textContent = childText;
-  ParentEl.appendChild(childEl);
-}
-
 function makePicture(imageEl, index){
-  //Chooses a random unique index
+  //Chooses a random unique index from the array of random unique indexes
   var randomIndex = randomArray[index];
 
   //updates all the things
@@ -137,6 +90,58 @@ function render(){
   }
 }
 
+function makeChart(){
+  //Need to make arrays of names and data
+  var clicksArray = [];
+  var viewsArray = [];
+  var clicksPerViewArray = [];
+  var namesArray = [];
+
+  for(var i = 0; i < allProducts.length; i++){
+    namesArray.push(allProducts[i].name);
+    clicksArray.push(allProducts[i].votes);
+    viewsArray.push(allProducts[i].views);
+    clicksPerViewArray.push(allProducts[i].votes/allProducts[i].views);
+  }
+  var ctx = canvasEl.getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: namesArray,
+      datasets: [{
+        label: '# of Votes',
+        data: clicksArray,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+
 function handleClick(){
   var chosenImg = event.target.title;
 
@@ -152,8 +157,7 @@ function handleClick(){
   //if we have 25 votes then turn off the event listener and make a table
   if(votesRemaining === 0){
     productContainerEl.removeEventListener('click', handleClick);
-    makeHeader();
-    makeBody();
+    makeChart();
   }
   render();
 }
@@ -162,5 +166,3 @@ productContainerEl.addEventListener('click', handleClick);
 
 makeRandomArray();
 render();
-
-
