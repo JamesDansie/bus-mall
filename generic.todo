@@ -1,16 +1,16 @@
 Initial
-☐ make a branch and read over problem
+✔ make a branch and read over problem @done (7/24/2019, 3:20:38 PM)
 
 Index Page
-☐ add button element for clearing data
+✔ add button element for clearing data @done (7/24/2019, 3:20:37 PM)
 
 JS Requirements
 ☐ pull the image list from the folder similar to; https://stackoverflow.com/questions/2727167/how-do-you-get-a-list-of-the-names-of-all-files-present-in-a-directory-in-node-j?rq=1
   ☐ turns out that is really hard. need live server? and node?
 ✔ Write the allProducuts array to local storage @done (7/24/2019, 1:20:44 PM)
   ✔ decide if it is per click or per 25 votes @done (7/24/2019, 1:20:43 PM)
-☐ read from local storage
-  ☐ where should this occur? page load?
-  ☐ I think where the instances are declared
-☐ add a clear data button
+✔ read from local storage @done (7/24/2019, 3:20:32 PM)
+  ✔ where should this occur? page load? @done (7/24/2019, 3:20:31 PM)
+  ✔ I think where the instances are declared @done (7/24/2019, 3:20:30 PM)
+✔ add a clear data button @done (7/24/2019, 3:20:34 PM)
 
