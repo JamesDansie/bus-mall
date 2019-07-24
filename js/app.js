@@ -47,11 +47,6 @@ function Product(nameIn){
   allProducts.push(this);
 }
 
-// Loop to make the instances
-for(var i = 0; i < products.length; i++){
-  new Product(products[i]);
-}
-
 //******* This section is for functions**************
 
 function randomNumber(min, max){
@@ -219,6 +214,11 @@ function makeBubbleChart(){
   });
 }
 
+function storeData(){
+  var stringy = JSON.stringify(allProducts);
+  localStorage.setItem('productData', stringy);
+}
+
 function handleClick(){
   var chosenImg = event.target.title;
 
@@ -228,6 +228,8 @@ function handleClick(){
       allProducts[i].votes++;
       allProducts[i].clicksPerView = allProducts[i].votes/allProducts[i].views;
     }
+
+    storeData();
   }
 
   votesRemaining--;
@@ -243,6 +245,24 @@ function handleClick(){
   render();
 }
 
+function makeInstances(){
+  var localData = localStorage.getItem('productData');
+
+  for(var i = 0; i < products.length; i++){
+    // Loop to make the instances
+    new Product(products[i]);
+  }
+
+  //if there is nothing it will return a null, null = false, so !null = true
+  if (localData) {
+    var test = JSON.parse(localData);
+    allProducts = test;
+  }
+}
+
+//***************************executable Code******************** */
+
+makeInstances();
 productContainerEl.addEventListener('click', handleClick);
 makeRandomArray();
 render();
