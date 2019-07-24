@@ -1,25 +1,41 @@
 body{
-  background-color: rgb(175, 241, 175);
+  background-color:  #73FFB4;
   text-align: center;
+}
+button{
+  display: block;
+  text-align: center;
+  margin: 10px auto;
+  padding: 10px;
 }
 canvas{
   margin: 15px;
 }
 h1{
+  color: #CC47A1;
   font-size: 36px;
   font-weight: bold;
   text-align: center;
   margin: 1.5em;
+  background-color: #47C8CC;
+  border: dashed 2px black;
+  padding: 30px 0px 30px 0px;
 }
 img{
   border: solid 3px blue;
-  margin: 10px;
-  width: 25%;
-  height: 25%;
+  margin: 30px;
+  width: 300px;
+  height: 300px;
+}
+p{
+  font-size: 20px;
+  margin: 30px;
+  color: black;
 }
 #product-container{
+  margin: 50px;
   border: solid 2px black;
-  background-color: teal;
+  background-color: #47C8CC;
 }
 td{
   text-align: center;

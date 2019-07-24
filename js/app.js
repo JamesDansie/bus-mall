@@ -5,6 +5,7 @@ var imageTwoEl = document.getElementById('product2');
 var imageThreeEl = document.getElementById('product3');
 var productContainerEl = document.getElementById('product-container');
 var canvasEl = document.getElementById('chart');
+var buttonEl = document.getElementById('clear');
 var randomArray = [];
 var randomIndex = 0;
 var votesRemaining = 25;
@@ -45,11 +46,6 @@ function Product(nameIn){
   this.clicksPerView = 0;
 
   allProducts.push(this);
-}
-
-// Loop to make the instances
-for(var i = 0; i < products.length; i++){
-  new Product(products[i]);
 }
 
 //******* This section is for functions**************
@@ -219,6 +215,11 @@ function makeBubbleChart(){
   });
 }
 
+function storeData(){
+  var stringy = JSON.stringify(allProducts);
+  localStorage.setItem('productData', stringy);
+}
+
 function handleClick(){
   var chosenImg = event.target.title;
 
@@ -228,6 +229,8 @@ function handleClick(){
       allProducts[i].votes++;
       allProducts[i].clicksPerView = allProducts[i].votes/allProducts[i].views;
     }
+
+    storeData();
   }
 
   votesRemaining--;
@@ -243,6 +246,27 @@ function handleClick(){
   render();
 }
 
+function makeInstances(){
+  var localData = localStorage.getItem('productData');
+
+  for(var i = 0; i < products.length; i++){
+    // Loop to make the instances
+    new Product(products[i]);
+  }
+
+  //if there is nothing it will return a null, null = false, so !null = true
+  if (localData) {
+    var test = JSON.parse(localData);
+    allProducts = test;
+  }
+}
+
+//***************************executable Code******************** */
+
+makeInstances();
 productContainerEl.addEventListener('click', handleClick);
+buttonEl.addEventListener('click', function(){
+  localStorage.clear();
+});
 makeRandomArray();
 render();
