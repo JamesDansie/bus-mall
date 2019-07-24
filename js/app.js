@@ -5,6 +5,7 @@ var imageTwoEl = document.getElementById('product2');
 var imageThreeEl = document.getElementById('product3');
 var productContainerEl = document.getElementById('product-container');
 var canvasEl = document.getElementById('chart');
+var buttonEl = document.getElementById('clear');
 var randomArray = [];
 var randomIndex = 0;
 var votesRemaining = 25;
@@ -264,5 +265,8 @@ function makeInstances(){
 
 makeInstances();
 productContainerEl.addEventListener('click', handleClick);
+buttonEl.addEventListener('click', function(){
+  localStorage.clear();
+});
 makeRandomArray();
 render();

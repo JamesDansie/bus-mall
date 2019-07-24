@@ -2,6 +2,11 @@ body{
   background-color: rgb(175, 241, 175);
   text-align: center;
 }
+button{
+  display: block;
+  text-align: center;
+  margin: auto;
+}
 canvas{
   margin: 15px;
 }
